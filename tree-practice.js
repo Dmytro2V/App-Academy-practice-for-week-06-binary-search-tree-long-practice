@@ -4,7 +4,7 @@ const { BinarySearchTree, TreeNode } = require('./binary-search-tree.js');
 
 // Practice problems on binary trees
 
-/*
+
  // for check - Initialize Binary Search Trees
  
 
@@ -13,17 +13,17 @@ const { BinarySearchTree, TreeNode } = require('./binary-search-tree.js');
   //   2     6
   //  / \   / \
   // 1   3 5   7
-  bstRoot = new TreeNode(4);
-  bstRoot.left = new TreeNode(2);
+bstRoot = new TreeNode(4);
+ bstRoot.left = new TreeNode(2);
   bstRoot.left.left = new TreeNode(1);
   bstRoot.left.right = new TreeNode(3);
   bstRoot.right = new TreeNode(6);
   bstRoot.right.left = new TreeNode(5);
   bstRoot.right.right = new TreeNode(7);
+//
+console.log(getHeight(bstRoot));
 
-console.log(findMinBT(bstRoot));
-*/
-function findMinBST (rootNode) { // lets make recursive
+function findMinBST (rootNode) { // lets make recursive O(log(n))
   // Your code here
   //if (rootNode === null) return null
   if (rootNode.left) return findMinBST(rootNode.left);
@@ -31,14 +31,14 @@ function findMinBST (rootNode) { // lets make recursive
   return rootNode.val
 }
 
-function findMaxBST (rootNode) { // iteractive
+function findMaxBST (rootNode) { // iteractive O(log(n))
   // Your code here
   while (rootNode.right) rootNode = rootNode.right
 
   return rootNode.val
 }
 
-function findMinBT (rootNode) { //iteractive - breadth-first
+function findMinBT (rootNode) { //iteractive - breadth-first O(n)
   // Your code here  
   let queue = [rootNode]; // making dynamical list of all nodes
   let min = rootNode.val      // tracking min
@@ -52,7 +52,7 @@ function findMinBT (rootNode) { //iteractive - breadth-first
   return min;
 }
 
-function findMaxBT (rootNode) { // recursive
+function findMaxBT (rootNode) { // recursive O(n)
   // Your code here
   let max = rootNode.val;
   if (rootNode.left) {
@@ -66,13 +66,33 @@ function findMaxBT (rootNode) { // recursive
   return max;
 }
 
-function getHeight (rootNode) {
+function getHeight (rootNode) {//recursive
   // Your code here
+  if (rootNode === null) return -1;
+  let maxHeight = 0 // height = number of levels from 0, so null tree => -1 height
+  
+  if (rootNode.left) {
+    let leftHeight = getHeight(rootNode.left);
+    if (leftHeight >= maxHeight) maxHeight = leftHeight + 1
+  }
+  if (rootNode.right) {
+    let rightHeight = getHeight(rootNode.right);
+    if (rightHeight >= maxHeight) maxHeight = rightHeight + 1
+  }
+  return maxHeight;
 }
 
-function balancedTree (rootNode) {
+function balancedTree (rootNode) { // wrong descriotion in readme - only left|right tree should be balanced
+                                   // in tests - all of subtrees
   // Your code here
+  if (rootNode.left === null && rootNode.right === null) return true;
+  else if (rootNode.left===null || rootNode.right===null) { // one branch is null, need to check other
+    if (Math.abs(getHeight(rootNode.left) - getHeight(rootNode.right)) <= 1) return true;
+    return false;
+  }
+  return balancedTree(rootNode.left) && balancedTree(rootNode.right);
 }
+
 
 function countNodes (rootNode) {
   // Your code here
