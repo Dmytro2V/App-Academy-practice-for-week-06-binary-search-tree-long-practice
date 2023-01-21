@@ -4,20 +4,66 @@ const { BinarySearchTree, TreeNode } = require('./binary-search-tree.js');
 
 // Practice problems on binary trees
 
-function findMinBST (rootNode) {
+/*
+ // for check - Initialize Binary Search Trees
+ 
+
+  //      4
+  //    /   \
+  //   2     6
+  //  / \   / \
+  // 1   3 5   7
+  bstRoot = new TreeNode(4);
+  bstRoot.left = new TreeNode(2);
+  bstRoot.left.left = new TreeNode(1);
+  bstRoot.left.right = new TreeNode(3);
+  bstRoot.right = new TreeNode(6);
+  bstRoot.right.left = new TreeNode(5);
+  bstRoot.right.right = new TreeNode(7);
+
+console.log(findMinBT(bstRoot));
+*/
+function findMinBST (rootNode) { // lets make recursive
   // Your code here
+  //if (rootNode === null) return null
+  if (rootNode.left) return findMinBST(rootNode.left);
+
+  return rootNode.val
 }
 
-function findMaxBST (rootNode) {
+function findMaxBST (rootNode) { // iteractive
   // Your code here
+  while (rootNode.right) rootNode = rootNode.right
+
+  return rootNode.val
 }
 
-function findMinBT (rootNode) {
-  // Your code here
+function findMinBT (rootNode) { //iteractive - breadth-first
+  // Your code here  
+  let queue = [rootNode]; // making dynamical list of all nodes
+  let min = rootNode.val      // tracking min
+
+  while (queue.length > 0) { // traversing
+    let currentNode = queue.shift(); // removing first and adding up to 2 children
+    if (currentNode.val < min) min = currentNode.val
+    if (currentNode.left) queue.push(currentNode.left);
+    if (currentNode.right) queue.push(currentNode.right);
+  }
+  return min;
 }
 
-function findMaxBT (rootNode) {
+function findMaxBT (rootNode) { // recursive
   // Your code here
+  let max = rootNode.val;
+  if (rootNode.left) {
+    let leftMax = findMaxBT(rootNode.left);
+    if (leftMax > max) max = leftMax 
+  }
+  if (rootNode.right) {
+    let rightMax = findMaxBT(rootNode.right);
+    if (rightMax > max) max = rightMax 
+  }
+  return max;
 }
 
 function getHeight (rootNode) {
